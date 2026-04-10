@@ -108,6 +108,31 @@ export function Projects() {
           </p>
         </div>
 
+        {/* Photo banner */}
+        <div className="grid md:grid-cols-3 gap-4 mb-10">
+          <div className="overflow-hidden aspect-[4/3]">
+            <img
+              src="https://cdn.poehali.dev/projects/4e1b9fea-ef4e-4d1f-89e2-54574e221934/files/7515db3b-f044-4ca2-a378-c6ba776f9eb1.jpg"
+              alt="Ремонт автомобиля"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div className="overflow-hidden aspect-[4/3]">
+            <img
+              src="https://cdn.poehali.dev/projects/4e1b9fea-ef4e-4d1f-89e2-54574e221934/files/c97c1d43-ebd0-4aa6-8337-33b5ea27f037.jpg"
+              alt="Диагностика автомобиля"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div className="overflow-hidden aspect-[4/3]">
+            <img
+              src="https://cdn.poehali.dev/projects/4e1b9fea-ef4e-4d1f-89e2-54574e221934/files/02f138a8-f448-46fc-bf76-f7c57d046cf0.jpg"
+              alt="Шиномонтаж"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+        </div>
+
         {/* Category tabs */}
         <div className="flex flex-wrap gap-2 mb-10">
           {priceCategories.map((cat, i) => (
