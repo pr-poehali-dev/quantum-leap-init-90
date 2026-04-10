@@ -1,30 +1,43 @@
 import { useEffect, useRef, useState } from "react"
-import { Home, Building, Armchair, Trees } from "lucide-react"
 import { HighlightedText } from "./HighlightedText"
+import Icon from "@/components/ui/icon"
 
-const expertiseAreas = [
+const services = [
   {
-    title: "Жилая архитектура",
-    description: "Создаем дома, которые сочетают красоту с комфортом, где каждое пространство служит и форме, и функции.",
-    icon: Home,
+    title: "Диагностика автомобиля",
+    description:
+      "Компьютерная диагностика всех систем автомобиля. Выявляем неисправности до того, как они станут серьёзной проблемой. Работаем со всеми марками и моделями.",
+    icon: "ScanSearch",
   },
   {
-    title: "Коммерческие объекты",
+    title: "Замена масла и жидкостей",
     description:
-      "Проектируем рабочие пространства, которые вдохновляют на продуктивность и отражают ценности передовых организаций.",
-    icon: Building,
+      "Заменяем моторное масло, тормозную, охлаждающую и трансмиссионную жидкости строго по регламенту. Используем только сертифицированные расходники.",
+    icon: "Droplets",
   },
   {
-    title: "Дизайн интерьеров",
+    title: "Ремонт ходовой части",
     description:
-      "Создаем интерьеры, которые гармонируют с архитектурной оболочкой, формируя целостный пространственный опыт.",
-    icon: Armchair,
+      "Замена амортизаторов, пружин, рычагов, шаровых опор, сайлентблоков. Регулировка развала-схождения на современном стенде.",
+    icon: "Car",
   },
   {
-    title: "Градостроительство",
+    title: "Шиномонтаж и балансировка",
     description:
-      "Формируем сообщества через продуманную интеграцию общественных пространств, зданий и природных элементов.",
-    icon: Trees,
+      "Сезонная смена резины, монтаж и демонтаж шин любых размеров, балансировка колёс. Также предоставляем услугу хранения шин.",
+    icon: "CircleDot",
+  },
+  {
+    title: "Ремонт тормозной системы",
+    description:
+      "Замена тормозных колодок, дисков, барабанов и суппортов. Прокачка тормозной системы. Гарантируем надёжность на дороге.",
+    icon: "Shield",
+  },
+  {
+    title: "Электротехнические работы",
+    description:
+      "Диагностика и ремонт электрики: замена аккумулятора, генератора, стартера, проводки. Работа с датчиками и блоками управления.",
+    icon: "Zap",
   },
 ]
 
@@ -59,45 +72,35 @@ export function Expertise() {
         <div className="max-w-3xl mb-20">
           <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Наши услуги</p>
           <h2 className="text-6xl font-medium leading-[1.15] tracking-tight mb-6 text-balance lg:text-8xl">
-            <HighlightedText>Экспертиза</HighlightedText>, отточенная
+            <HighlightedText>Всё</HighlightedText> для вашего
             <br />
-            практикой
+            автомобиля
           </h2>
           <p className="text-muted-foreground text-lg leading-relaxed">
-            Каждый проект опирается на десятилетия совокупного опыта, создавая архитектуру, которая одновременно инновационна и вневременна.
+            От быстрой замены масла до сложного ремонта — решаем любые задачи качественно и в срок.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-x-12 gap-y-16">
-          {expertiseAreas.map((area, index) => {
-            const Icon = area.icon
-            return (
-              <div
-                key={area.title}
-                ref={(el) => {
-                  itemRefs.current[index] = el
-                }}
-                data-index={index}
-                className={`relative pl-8 border-l border-border transition-all duration-700 ${
-                  visibleItems.includes(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
-                }`}
-                style={{ transitionDelay: `${index * 150}ms` }}
-              >
-                <div
-                  className={`transition-all duration-1000 ${
-                    visibleItems.includes(index) ? "animate-draw-stroke" : ""
-                  }`}
-                  style={{
-                    transitionDelay: `${index * 150}ms`,
-                  }}
-                >
-                  <Icon className="w-10 h-10 mb-4 text-foreground" strokeWidth={1.25} />
-                </div>
-                <h3 className="text-xl font-medium mb-4">{area.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{area.description}</p>
+          {services.map((service, index) => (
+            <div
+              key={service.title}
+              ref={(el) => {
+                itemRefs.current[index] = el
+              }}
+              data-index={index}
+              className={`relative pl-8 border-l border-border transition-all duration-700 ${
+                visibleItems.includes(index) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              }`}
+              style={{ transitionDelay: `${index * 150}ms` }}
+            >
+              <div className={`transition-all duration-1000 ${visibleItems.includes(index) ? "animate-draw-stroke" : ""}`}>
+                <Icon name={service.icon} fallback="Wrench" className="w-10 h-10 mb-4 text-foreground" strokeWidth={1.25} />
               </div>
-            )
-          })}
+              <h3 className="text-xl font-medium mb-4">{service.title}</h3>
+              <p className="text-muted-foreground leading-relaxed">{service.description}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

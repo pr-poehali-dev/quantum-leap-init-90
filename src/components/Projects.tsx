@@ -1,62 +1,92 @@
 import { useState, useEffect, useRef } from "react"
-import { ArrowUpRight } from "lucide-react"
+import { HighlightedText } from "./HighlightedText"
 
-const projects = [
+const priceCategories = [
   {
     id: 1,
-    title: "Резиденция Светлая",
-    category: "Жилой дом",
-    location: "Москва, Россия",
-    year: "2024",
-    image: "/images/hously-1.png",
+    category: "Диагностика",
+    services: [
+      { name: "Компьютерная диагностика", price: "от 500 ₽" },
+      { name: "Диагностика ходовой части", price: "от 800 ₽" },
+      { name: "Диагностика тормозной системы", price: "от 600 ₽" },
+      { name: "Диагностика электрики", price: "от 700 ₽" },
+    ],
   },
   {
     id: 2,
-    title: "Павильон Стекло",
-    category: "Коммерческий объект",
-    location: "Санкт-Петербург, Россия",
-    year: "2023",
-    image: "/images/hously-2.png",
+    category: "Замена масла и жидкостей",
+    services: [
+      { name: "Замена моторного масла + фильтр", price: "от 800 ₽" },
+      { name: "Замена тормозной жидкости", price: "от 900 ₽" },
+      { name: "Замена охлаждающей жидкости", price: "от 1 000 ₽" },
+      { name: "Замена масла в АКПП", price: "от 2 500 ₽" },
+    ],
   },
   {
     id: 3,
-    title: "Дом у моря",
-    category: "Жилой дом",
-    location: "Сочи, Россия",
-    year: "2023",
-    image: "/images/hously-3.png",
+    category: "Ходовая часть",
+    services: [
+      { name: "Замена амортизатора (1 шт.)", price: "от 1 200 ₽" },
+      { name: "Замена шаровой опоры", price: "от 800 ₽" },
+      { name: "Замена рычага подвески", price: "от 1 500 ₽" },
+      { name: "Развал-схождение", price: "от 1 500 ₽" },
+    ],
   },
   {
     id: 4,
-    title: "Северный приют",
-    category: "Гостиничный комплекс",
-    location: "Казань, Россия",
-    year: "2024",
-    image: "/images/hously-4.png",
+    category: "Шиномонтаж",
+    services: [
+      { name: "Шиномонтаж R13–R15 (4 колеса)", price: "от 1 200 ₽" },
+      { name: "Шиномонтаж R16–R18 (4 колеса)", price: "от 1 600 ₽" },
+      { name: "Балансировка (4 колеса)", price: "от 800 ₽" },
+      { name: "Хранение шин (сезон)", price: "от 2 000 ₽" },
+    ],
+  },
+]
+
+const promos = [
+  {
+    title: "Сезонная замена шин",
+    desc: "Шиномонтаж + балансировка 4 колёс",
+    badge: "−15%",
+    color: "bg-orange-50 border-orange-200",
+    badgeColor: "bg-orange-400 text-white",
+  },
+  {
+    title: "ТО под ключ",
+    desc: "Замена масла + диагностика + проверка ходовой",
+    badge: "−20%",
+    color: "bg-foreground text-white border-foreground",
+    badgeColor: "bg-white text-foreground",
+  },
+  {
+    title: "Первое ТО",
+    desc: "Скидка для новых клиентов на первое обслуживание",
+    badge: "−10%",
+    color: "bg-orange-50 border-orange-200",
+    badgeColor: "bg-orange-400 text-white",
   },
 ]
 
 export function Projects() {
-  const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [revealedImages, setRevealedImages] = useState<Set<number>>(new Set())
-  const imageRefs = useRef<(HTMLDivElement | null)[]>([])
+  const [activeCategory, setActiveCategory] = useState(0)
+  const [revealedPromos, setRevealedPromos] = useState<Set<number>>(new Set())
+  const promoRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = imageRefs.current.indexOf(entry.target as HTMLDivElement)
-            if (index !== -1) {
-              setRevealedImages((prev) => new Set(prev).add(projects[index].id))
-            }
+          const index = promoRefs.current.indexOf(entry.target as HTMLDivElement)
+          if (entry.isIntersecting && index !== -1) {
+            setRevealedPromos((prev) => new Set(prev).add(index))
           }
         })
       },
       { threshold: 0.2 },
     )
 
-    imageRefs.current.forEach((ref) => {
+    promoRefs.current.forEach((ref) => {
       if (ref) observer.observe(ref)
     })
 
@@ -68,54 +98,69 @@ export function Projects() {
       <div className="container mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16">
           <div>
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Избранные работы</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight">Наши проекты</h2>
+            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">Прозрачные цены</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight">
+              <HighlightedText>Стоимость</HighlightedText> услуг
+            </h2>
           </div>
-          <a
-            href="#"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-          >
-            Смотреть все проекты
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </a>
+          <p className="text-muted-foreground text-sm max-w-xs">
+            Окончательная цена рассчитывается после диагностики. Никаких скрытых доплат.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 md:gap-8">
-          {projects.map((project, index) => (
-            <article
-              key={project.id}
-              className="group cursor-pointer"
-              onMouseEnter={() => setHoveredId(project.id)}
-              onMouseLeave={() => setHoveredId(null)}
+        {/* Category tabs */}
+        <div className="flex flex-wrap gap-2 mb-10">
+          {priceCategories.map((cat, i) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(i)}
+              className={`px-4 py-2 text-sm transition-all duration-200 border ${
+                activeCategory === i
+                  ? "bg-foreground text-white border-foreground"
+                  : "bg-white text-foreground border-border hover:border-foreground"
+              }`}
             >
-              <div ref={(el) => (imageRefs.current[index] = el)} className="relative overflow-hidden aspect-[4/3] mb-6">
-                <img
-                  src={project.image || "/placeholder.svg"}
-                  alt={project.title}
-                  className={`w-full h-full object-cover transition-transform duration-700 ${
-                    hoveredId === project.id ? "scale-105" : "scale-100"
-                  }`}
-                />
-                <div
-                  className="absolute inset-0 bg-primary origin-top"
-                  style={{
-                    transform: revealedImages.has(project.id) ? "scaleY(0)" : "scaleY(1)",
-                    transition: "transform 1.5s cubic-bezier(0.76, 0, 0.24, 1)",
-                  }}
-                />
-              </div>
-
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-xl font-medium mb-2 group-hover:underline underline-offset-4">{project.title}</h3>
-                  <p className="text-muted-foreground text-sm">
-                    {project.category} · {project.location}
-                  </p>
-                </div>
-                <span className="text-muted-foreground/60 text-sm">{project.year}</span>
-              </div>
-            </article>
+              {cat.category}
+            </button>
           ))}
+        </div>
+
+        {/* Price table */}
+        <div className="bg-white border border-border mb-16">
+          {priceCategories[activeCategory].services.map((service, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between px-6 py-4 border-b border-border last:border-0 hover:bg-secondary/30 transition-colors"
+            >
+              <span className="text-foreground">{service.name}</span>
+              <span className="font-medium text-foreground">{service.price}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Promos */}
+        <div>
+          <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-8">Акции и спецпредложения</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {promos.map((promo, i) => (
+              <div
+                key={i}
+                ref={(el) => (promoRefs.current[i] = el)}
+                className={`border p-8 transition-all duration-700 ${promo.color} ${
+                  revealedPromos.has(i) ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+                }`}
+                style={{ transitionDelay: `${i * 150}ms` }}
+              >
+                <span className={`inline-block text-xs px-3 py-1 font-bold mb-4 ${promo.badgeColor}`}>
+                  {promo.badge}
+                </span>
+                <h3 className="text-xl font-medium mb-2">{promo.title}</h3>
+                <p className={`text-sm leading-relaxed ${promo.color.includes("foreground") ? "text-white/70" : "text-muted-foreground"}`}>
+                  {promo.desc}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
